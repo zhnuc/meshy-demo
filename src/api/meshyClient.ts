@@ -1,10 +1,7 @@
 import type { GenerateParams, RefineParams, TaskData } from '../types';
 
-// 开发环境使用代理，生产环境直接访问
-const isDev = import.meta.env.DEV;
-const API_BASE_URL = isDev 
-  ? '/api/meshy/openapi/v2/text-to-3d' 
-  : 'https://api.meshy.ai/openapi/v2/text-to-3d';
+// 始终使用代理以避免 CORS 问题
+const API_BASE_URL = '/api/meshy/openapi/v2/text-to-3d';
 
 // 测试模式 API Key（不消耗积分）
 const TEST_API_KEY = 'msy_dummy_api_key_for_test_mode_12345678';
@@ -23,10 +20,10 @@ class MeshyClient {
     };
   }
   
-  // 处理资产 URL（始终使用代理以避免 CORS 问题）
+  // 处理资产 URL（使用 serverless 代理以避免 CORS 问题）
   private processAssetUrl(url: string): string {
     if (url.startsWith('https://assets.meshy.ai')) {
-      return url.replace('https://assets.meshy.ai', '/assets/meshy');
+      return `/api/proxy?url=${encodeURIComponent(url)}`;
     }
     return url;
   }

@@ -1,9 +1,7 @@
 import type { TaskData } from '../types';
 
-const isDev = import.meta.env.DEV;
-const API_BASE_URL = isDev 
-  ? '/api/meshy/openapi/v1/animations' 
-  : 'https://api.meshy.ai/openapi/v1/animations';
+// 始终使用代理以避免 CORS 问题
+const API_BASE_URL = '/api/meshy/openapi/v1/animations';
 
 const TEST_API_KEY = 'msy_dummy_api_key_for_test_mode_12345678';
 
@@ -45,7 +43,7 @@ class AnimationClient {
   
   private processAssetUrl(url: string): string {
     if (url.startsWith('https://assets.meshy.ai')) {
-      return url.replace('https://assets.meshy.ai', '/assets/meshy');
+      return `/api/proxy?url=${encodeURIComponent(url)}`;
     }
     return url;
   }
