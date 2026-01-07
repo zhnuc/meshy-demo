@@ -1,0 +1,27 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/meshy/:path*",
+      "destination": "https://api.meshy.ai/:path*"
+    },
+    {
+      "source": "/assets/meshy/:path*",
+      "destination": "https://assets.meshy.ai/:path*"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Cross-Origin-Opener-Policy",
+          "value": "same-origin"
+        },
+        {
+          "key": "Cross-Origin-Embedder-Policy",
+          "value": "require-corp"
+        }
+      ]
+    }
+  ]
+}
