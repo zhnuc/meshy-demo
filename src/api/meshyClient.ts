@@ -23,9 +23,9 @@ class MeshyClient {
     };
   }
   
-  // 处理资产 URL（开发环境使用代理）
+  // 处理资产 URL（始终使用代理以避免 CORS 问题）
   private processAssetUrl(url: string): string {
-    if (isDev && url.startsWith('https://assets.meshy.ai')) {
+    if (url.startsWith('https://assets.meshy.ai')) {
       return url.replace('https://assets.meshy.ai', '/assets/meshy');
     }
     return url;

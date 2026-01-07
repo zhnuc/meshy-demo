@@ -44,7 +44,7 @@ class AnimationClient {
   }
   
   private processAssetUrl(url: string): string {
-    if (isDev && url.startsWith('https://assets.meshy.ai')) {
+    if (url.startsWith('https://assets.meshy.ai')) {
       return url.replace('https://assets.meshy.ai', '/assets/meshy');
     }
     return url;
