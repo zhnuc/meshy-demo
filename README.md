@@ -2,7 +2,7 @@
 
 这是一个基于 React + Three.js 的 3D 模型生成工作台，包括 Text-to-3D 生成和角色动画系统。
 
-## 🚀 快速开始
+## 快速开始
 
 ### 安装依赖
 ```bash
@@ -16,7 +16,7 @@ npm run dev
 
 访问 http://localhost:5174
 
-## 📦 技术栈
+## 技术栈
 
 - **前端框架**: React 19 + TypeScript
 - **3D 渲染**: React Three Fiber + Drei
@@ -25,9 +25,9 @@ npm run dev
 - **构建工具**: Vite (Rolldown)
 - **样式**: CSS Modules
 
-## 🎯 核心功能
+## 核心功能
 
-### Tab 1: Text-to-3D 生成
+### Tab 1: Text-to-3D 
 
 #### 三栏布局
 - **左侧**: 参数面板（Prompt、AI 模型、艺术风格等）
@@ -50,7 +50,7 @@ npm run dev
 - **PBR 贴图**: 金属度、粗糙度、法线贴图
 - **纹理提示词**: 额外的纹理描述
 
-### Tab 2: 角色动画系统 🎬
+### Tab 2: 角色动画
 
 #### 三栏布局
 - **左侧**: 动画库（40+ 预设动画，分类筛选）
@@ -62,7 +62,7 @@ npm run dev
    - 选择已生成的人形模型
    - 设置角色身高（0.5m - 3m）
    - 自动骨骼绑定
-   - 生成基础动画（行走、奔跑）
+   - 生成基础动画
 
 2. **应用动画 (Animation)**
    - 从动画库选择动画
@@ -76,7 +76,7 @@ npm run dev
 - **动画切换**: 支持多个动画片段切换
 - **状态显示**: 实时显示播放状态和动画信息
 
-#### 动画库分类（41 个真实动画）
+#### 动画库分类
 - **Walking**: 步行动作（休闲步行、战斗步行等）
 - **Running**: 跑步动作（快跑、跳跃跑、方向跑等）
 - **Dancing**: 舞蹈动作（搞笑舞蹈系列）
@@ -109,7 +109,7 @@ const TEST_API_KEY = 'msy_dummy_api_key_for_test_mode_12345678';
 2. 输入你的 Meshy API Key（格式：`msy_...`）
 3. API Key 会自动应用到所有功能（Text-to-3D、Rigging、Animation）
 
-⚠️ **重要**: 角色动画功能需要真实 API Key，测试模式下的任务 ID 无法用于 Rigging/Animation API。
+⚠️ : 角色动画功能需要真实 API Key，测试模式下的任务 ID 无法用于 Rigging/Animation API。
 
 ### CORS 代理配置
 
@@ -153,16 +153,8 @@ export default defineConfig({
 - 确认 API 返回的 `model_urls.glb` 有效
 - 点击"重试"按钮重新加载
 
-### 3. 测试模式限制
-**限制**:
-- 总是返回相同的预设模型
-- 不能自定义 Prompt（返回固定结果）
-- **无法使用 Rigging/Animation API**（需要真实任务 ID）
 
-**解决方案**:
-- 使用真实 API Key 进行实际生成
-
-### 4. 动画不播放
+### 3. 动画不播放
 **可能原因**:
 - GLB 文件中没有动画数据
 - 模型未正确绑定骨骼
@@ -172,7 +164,7 @@ export default defineConfig({
 - 检查动画播放器是否显示"当前模型没有动画"
 - 查看控制台日志确认动画片段加载情况
 
-## � 项目结构
+##  项目结构
 
 ```
 src/
@@ -204,7 +196,7 @@ src/
 └── App.tsx                     # 路由配置
 ```
 
-## 🎨 API 端点
+## API 端点
 
 ### Text-to-3D API
 - `POST /openapi/v2/text-to-3d` - 创建预览/细化任务
@@ -220,48 +212,6 @@ src/
 
 详见 `model_api.md`
 
-## 🔍 调试技巧
-
-### 查看 API 请求
-打开浏览器开发者工具 → Network 标签，筛选 `meshy` 查看所有 API 请求。
-
-### 查看 3D 场景
-按 F12 打开控制台，查看 Three.js 相关日志。
-
-### 查看动画信息
-```javascript
-// 在控制台查看当前动画状态
-console.log(useStore.getState().animationClips);
-console.log(useStore.getState().animationPlaying);
-```
-
-### 查看状态管理
-安装 [Redux DevTools](https://github.com/reduxjs/redux-devtools) 可以查看 Zustand 状态变化。
-
-## 🎯 技术亮点
-
-### 1. 完整的 AI 工作流
-- Text-to-3D 生成（Preview + Refine）
-- 角色绑定（Rigging）
-- 动画应用（Animation）
-- 实时进度反馈
-
-### 2. Three.js 动画系统
-- 使用 `AnimationMixer` 播放动画
-- 支持多个动画片段切换
-- 动画速度控制（0.1x - 3x）
-- 播放/暂停/重播控制
-
-### 3. 状态管理
-- Zustand 全局状态
-- API Key 跨组件共享
-- 动画状态实时同步
-
-### 4. 用户体验
-- 分类动画库（7 大类，41 个真实动画）
-- 搜索和筛选功能
-- 实时预览效果
-- 进度条和状态提示
 
 ## 📝 开发计划
 
@@ -275,11 +225,8 @@ console.log(useStore.getState().animationPlaying);
 - [ ] 模型导出功能
 - [ ] 优化加载性能（LOD、缓存）
 - [ ] 添加单元测试
-- [ ] 部署到 Vercel
+- [x] 部署到 Vercel
 
-## 📄 许可证
-
-MIT License
 
 ## 🙏 致谢
 
