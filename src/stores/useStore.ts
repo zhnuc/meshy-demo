@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { GenerationState, AssetItem, ArtStyle, AIModel, Topology, SymmetryMode, PoseMode } from '../types';
+import type { GenerationState, AssetItem, ArtStyle, AIModel, Topology, SymmetryMode, PoseMode, MaterialInfo, MaterialOverride } from '../types';
 
 interface AppState {
   // API 设置
@@ -35,6 +35,11 @@ interface AppState {
   animationClips: string[];
   selectedAnimationClip: string | null;
   
+  // 材质编辑
+  materials: MaterialInfo[];
+  selectedMaterialId: string | null;
+  materialOverrides: Record<string, MaterialOverride>;
+  
   // Actions
   setApiKey: (apiKey: string) => void;
   setUseTestMode: (useTestMode: boolean) => void;
@@ -65,6 +70,13 @@ interface AppState {
   setAnimationSpeed: (speed: number) => void;
   setAnimationClips: (clips: string[]) => void;
   setSelectedAnimationClip: (clip: string | null) => void;
+  
+  // 材质编辑 Actions
+  setMaterials: (materials: MaterialInfo[]) => void;
+  setSelectedMaterial: (id: string | null) => void;
+  updateMaterialOverride: (id: string, override: MaterialOverride) => void;
+  resetMaterialOverride: (id: string) => void;
+  resetAllMaterialOverrides: () => void;
 }
 
 const initialGeneration: GenerationState = {
@@ -103,6 +115,11 @@ export const useStore = create<AppState>((set) => ({
   animationSpeed: 1,
   animationClips: [],
   selectedAnimationClip: null,
+  
+  // 材质编辑初始状态
+  materials: [],
+  selectedMaterialId: null,
+  materialOverrides: {},
   
   // Actions
   setApiKey: (apiKey) => set({ apiKey }),
@@ -151,4 +168,21 @@ export const useStore = create<AppState>((set) => ({
   setAnimationSpeed: (animationSpeed) => set({ animationSpeed }),
   setAnimationClips: (animationClips) => set({ animationClips }),
   setSelectedAnimationClip: (selectedAnimationClip) => set({ selectedAnimationClip }),
+  
+  // 材质编辑 Actions
+  setMaterials: (materials) => set({ materials }),
+  setSelectedMaterial: (selectedMaterialId) => set({ selectedMaterialId }),
+  updateMaterialOverride: (id, override) => 
+    set((state) => ({
+      materialOverrides: {
+        ...state.materialOverrides,
+        [id]: { ...state.materialOverrides[id], ...override }
+      }
+    })),
+  resetMaterialOverride: (id) =>
+    set((state) => {
+      const { [id]: _, ...rest } = state.materialOverrides;
+      return { materialOverrides: rest };
+    }),
+  resetAllMaterialOverrides: () => set({ materialOverrides: {} }),
 }));

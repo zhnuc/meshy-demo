@@ -73,7 +73,6 @@ export function AnimationLibrary({ selectedAnimationId, onSelectAnimation }: Ani
               </div>
               <div className="animation-info">
                 <h3 className="animation-name">{anim.name}</h3>
-                <p className="animation-category">{anim.category}</p>
                 <p className="animation-description">{anim.description}</p>
               </div>
             </div>

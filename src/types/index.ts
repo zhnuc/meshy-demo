@@ -81,3 +81,27 @@ export interface GenerationState {
   modelUrl: string | null;
   error: string | null;
 }
+
+// 材质信息
+export interface MaterialInfo {
+  uuid: string;
+  name: string;
+  color: string;
+  metalness: number;
+  roughness: number;
+  emissive: string;
+  emissiveIntensity: number;
+  opacity: number;
+  transparent: boolean;
+}
+
+// 材质覆盖（用于编辑）
+export interface MaterialOverride {
+  color?: string;
+  metalness?: number;
+  roughness?: number;
+  emissive?: string;
+  emissiveIntensity?: number;
+  opacity?: number;
+  transparent?: boolean;
+}
