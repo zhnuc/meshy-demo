@@ -22,6 +22,22 @@
 
 .workspace-right {
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: 100%;
+}
+
+.workspace-right-top {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.workspace-right-bottom {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 
 /* Scene 容器样式 */

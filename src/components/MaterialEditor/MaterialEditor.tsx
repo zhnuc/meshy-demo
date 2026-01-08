@@ -1,4 +1,5 @@
 import { useStore } from '../../stores/useStore';
+import type { MaterialOverride } from '../../types';
 import './MaterialEditor.css';
 
 export function MaterialEditor() {
@@ -16,9 +17,9 @@ export function MaterialEditor() {
   const currentOverride = selectedMaterialId ? materialOverrides[selectedMaterialId] : undefined;
 
   // 获取当前值（优先使用 override，否则用原始值）
-  const getValue = <T,>(key: keyof typeof currentOverride, original: T): T => {
+  const getValue = <K extends keyof MaterialOverride>(key: K, original: NonNullable<MaterialOverride[K]>): NonNullable<MaterialOverride[K]> => {
     if (currentOverride && currentOverride[key] !== undefined) {
-      return currentOverride[key] as T;
+      return currentOverride[key] as NonNullable<MaterialOverride[K]>;
     }
     return original;
   };

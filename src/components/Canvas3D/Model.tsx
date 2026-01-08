@@ -4,11 +4,45 @@ import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import * as SkeletonUtils from 'three/addons/utils/SkeletonUtils.js';
 import { useStore } from '../../stores/useStore';
+import type { MaterialInfo } from '../../types';
 
 interface ModelProps {
   url: string;
   autoRotate?: boolean;
   onError?: (error: string) => void;
+}
+
+// 将 Three.js 颜色转换为 hex 字符串
+function colorToHex(color: THREE.Color): string {
+  return '#' + color.getHexString();
+}
+
+// 从模型中提取材质信息
+function extractMaterials(object: THREE.Object3D): MaterialInfo[] {
+  const materials: Map<string, MaterialInfo> = new Map();
+  
+  object.traverse((child) => {
+    if (child instanceof THREE.Mesh && child.material) {
+      const mats = Array.isArray(child.material) ? child.material : [child.material];
+      mats.forEach((mat) => {
+        if (mat instanceof THREE.MeshStandardMaterial && !materials.has(mat.uuid)) {
+          materials.set(mat.uuid, {
+            uuid: mat.uuid,
+            name: mat.name || `Material ${materials.size + 1}`,
+            color: colorToHex(mat.color),
+            metalness: mat.metalness,
+            roughness: mat.roughness,
+            emissive: colorToHex(mat.emissive),
+            emissiveIntensity: mat.emissiveIntensity,
+            opacity: mat.opacity,
+            transparent: mat.transparent,
+          });
+        }
+      });
+    }
+  });
+  
+  return Array.from(materials.values());
 }
 
 export function Model({ url, autoRotate = false, onError }: ModelProps) {
@@ -29,7 +63,66 @@ export function Model({ url, autoRotate = false, onError }: ModelProps) {
     setAnimationClips,
     setAnimationPlaying,
     selectedAnimationClip,
+    setMaterials,
+    materialOverrides,
+    setSelectedMaterial,
   } = useStore();
+  
+  // 提取并存储材质信息
+  useEffect(() => {
+    if (clonedScene) {
+      const mats = extractMaterials(clonedScene);
+      setMaterials(mats);
+      // 默认选中第一个材质
+      if (mats.length > 0) {
+        setSelectedMaterial(mats[0].uuid);
+      }
+    }
+    return () => {
+      setMaterials([]);
+      setSelectedMaterial(null);
+    };
+  }, [clonedScene, setMaterials, setSelectedMaterial]);
+  
+  // 应用材质覆盖
+  useEffect(() => {
+    if (!clonedScene) return;
+    
+    clonedScene.traverse((child) => {
+      if (child instanceof THREE.Mesh && child.material) {
+        const mats = Array.isArray(child.material) ? child.material : [child.material];
+        mats.forEach((mat) => {
+          if (mat instanceof THREE.MeshStandardMaterial) {
+            const override = materialOverrides[mat.uuid];
+            if (override) {
+              if (override.color !== undefined) {
+                mat.color.set(override.color);
+              }
+              if (override.metalness !== undefined) {
+                mat.metalness = override.metalness;
+              }
+              if (override.roughness !== undefined) {
+                mat.roughness = override.roughness;
+              }
+              if (override.emissive !== undefined) {
+                mat.emissive.set(override.emissive);
+              }
+              if (override.emissiveIntensity !== undefined) {
+                mat.emissiveIntensity = override.emissiveIntensity;
+              }
+              if (override.opacity !== undefined) {
+                mat.opacity = override.opacity;
+              }
+              if (override.transparent !== undefined) {
+                mat.transparent = override.transparent;
+              }
+              mat.needsUpdate = true;
+            }
+          }
+        });
+      }
+    });
+  }, [clonedScene, materialOverrides]);
   
   // 计算缩放和居中（应用到 group 而不是 clone）
   useEffect(() => {

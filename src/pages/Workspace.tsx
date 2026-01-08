@@ -1,6 +1,7 @@
 import { ParameterPanel } from '../components/ParameterPanel';
 import { Scene } from '../components/Canvas3D';
 import { AssetList } from '../components/AssetList';
+import { MaterialEditor } from '../components/MaterialEditor';
 import './Workspace.css';
 
 export function Workspace() {
@@ -16,9 +17,14 @@ export function Workspace() {
         <Scene />
       </main>
 
-      {/* 右侧：资产列表 */}
+      {/* 右侧：资产列表 + 材质编辑器 */}
       <aside className="workspace-right">
-        <AssetList />
+        <div className="workspace-right-top">
+          <AssetList />
+        </div>
+        <div className="workspace-right-bottom">
+          <MaterialEditor />
+        </div>
       </aside>
     </div>
   );
